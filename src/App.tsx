@@ -4,7 +4,7 @@ import {
   RecordIcon, StopIcon, SparklesIcon, VolumeIcon, ZoomIcon, ResetIcon, SettingsIcon,
   ShareIcon, BookOpenIcon, CheckIcon
 } from './components/Icons';
-import { LoopRegion, RecordingSession } from './types';
+import type { LoopRegion, RecordingSession } from './types';
 import { getPracticeAdvice } from './services/geminiService';
 
 const App: React.FC = () => {
@@ -46,8 +46,6 @@ const App: React.FC = () => {
 
   // --- State: Settings & Help ---
   const [showSettings, setShowSettings] = useState(false);
-  const [settingsTab, setSettingsTab] = useState<'guide' | 'api'>('guide');
-  const [apiKeyInput, setApiKeyInput] = useState('');
   const [showCopyFeedback, setShowCopyFeedback] = useState(false);
 
   // --- Refs ---
@@ -63,15 +61,6 @@ const App: React.FC = () => {
       mediaRef.current.volume = volume;
     }
   }, [volume]);
-
-  // Load API Key on mount
-  useEffect(() => {
-    const storedKey = localStorage.getItem('gemini_api_key');
-    if (storedKey) setApiKeyInput(storedKey);
-    
-    // Show guide by default if no file is loaded (first time user?)
-    // Optional: could check localStorage if they've seen it.
-  }, []);
 
   // Clean up object URLs on unmount
   useEffect(() => {
@@ -319,12 +308,6 @@ const App: React.FC = () => {
   };
 
   // --- Handlers: Settings & Sharing ---
-  const saveSettings = () => {
-    localStorage.setItem('gemini_api_key', apiKeyInput);
-    setShowSettings(false);
-    alert('Settings saved!');
-  };
-
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -380,9 +363,9 @@ const App: React.FC = () => {
           <button 
             onClick={() => setShowSettings(true)}
             className="p-2 text-gray-400 hover:text-white transition-colors"
-            title="Settings & Guide"
+            title="User Guide"
           >
-            <SettingsIcon className="w-6 h-6" />
+            <BookOpenIcon className="w-6 h-6" />
           </button>
         </div>
       </header>
@@ -754,25 +737,13 @@ const App: React.FC = () => {
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-virtuoso-800 border border-virtuoso-700 rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[80vh]">
             
-            <div className="flex border-b border-virtuoso-700">
-               <button 
-                 onClick={() => setSettingsTab('guide')}
-                 className={`flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 ${settingsTab === 'guide' ? 'bg-virtuoso-700 text-white' : 'hover:bg-virtuoso-700/50 text-gray-400'}`}
-               >
-                 <BookOpenIcon className="w-4 h-4" /> User Guide
-               </button>
-               <button 
-                 onClick={() => setSettingsTab('api')}
-                 className={`flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 ${settingsTab === 'api' ? 'bg-virtuoso-700 text-white' : 'hover:bg-virtuoso-700/50 text-gray-400'}`}
-               >
-                 <SettingsIcon className="w-4 h-4" /> AI Settings
-               </button>
+            <div className="flex border-b border-virtuoso-700 p-4 items-center gap-2">
+                 <BookOpenIcon className="w-5 h-5 text-gray-200" /> 
+                 <h2 className="font-bold text-lg text-white">User Guide</h2>
             </div>
             
             <div className="p-6 overflow-y-auto flex-1">
               
-              {/* GUIDE TAB */}
-              {settingsTab === 'guide' && (
                 <div className="space-y-6 text-gray-300">
                   <section>
                     <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
@@ -803,53 +774,15 @@ const App: React.FC = () => {
                     <p className="text-sm">Record yourself playing along. Then use the <b>"Compare with Loop"</b> button to hear the reference track followed immediately by your recording to spot mistakes.</p>
                   </section>
                 </div>
-              )}
-
-              {/* API TAB */}
-              {settingsTab === 'api' && (
-                <div className="space-y-4">
-                   <div className="bg-blue-500/10 border border-blue-500/30 p-4 rounded-lg">
-                      <h3 className="font-bold text-blue-400 mb-1">AI Features Optional</h3>
-                      <p className="text-xs text-blue-200">
-                        You can use all practice features (Loop, Record, Speed) without a key. 
-                        The key is only needed if you want the "AI Practice Coach" to give advice.
-                      </p>
-                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-1">
-                      Google Gemini API Key
-                    </label>
-                    <input 
-                      type="password" 
-                      value={apiKeyInput}
-                      onChange={(e) => setApiKeyInput(e.target.value)}
-                      placeholder="Enter your API Key (starts with AIza...)"
-                      className="w-full bg-virtuoso-900 border border-virtuoso-600 rounded px-3 py-2 text-white focus:outline-none focus:border-virtuoso-accent"
-                    />
-                    <p className="text-xs text-gray-500 mt-2">
-                      The key is stored securely in your browser's local storage.
-                    </p>
-                  </div>
-                </div>
-              )}
             </div>
 
             <div className="p-4 border-t border-virtuoso-700 bg-virtuoso-800 flex justify-end gap-3">
               <button 
                 onClick={() => setShowSettings(false)}
-                className="px-4 py-2 rounded text-gray-400 hover:text-white transition-colors"
+                className="px-4 py-2 rounded bg-virtuoso-700 hover:bg-virtuoso-600 text-white transition-colors"
               >
                 Close
               </button>
-              {settingsTab === 'api' && (
-                <button 
-                  onClick={saveSettings}
-                  className="px-4 py-2 bg-virtuoso-accent hover:bg-blue-400 text-virtuoso-900 font-bold rounded shadow-lg transition-transform hover:scale-105"
-                >
-                  Save API Key
-                </button>
-              )}
             </div>
           </div>
         </div>
