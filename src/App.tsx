@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   PlayIcon, PauseIcon, LoopIcon, UploadIcon, 
-  RecordIcon, StopIcon, SparklesIcon, VolumeIcon, ZoomIcon, ResetIcon, SettingsIcon,
+  RecordIcon, StopIcon, SparklesIcon, VolumeIcon, ZoomIcon, ResetIcon,
   ShareIcon, BookOpenIcon, CheckIcon
 } from './components/Icons';
 import type { LoopRegion, RecordingSession } from './types';
@@ -359,7 +359,7 @@ const App: React.FC = () => {
             )}
           </button>
 
-          {/* Settings Button */}
+          {/* Guide Button */}
           <button 
             onClick={() => setShowSettings(true)}
             className="p-2 text-gray-400 hover:text-white transition-colors"
