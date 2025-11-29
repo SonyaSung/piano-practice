@@ -4,6 +4,7 @@ import {
   RecordIcon, StopIcon, SparklesIcon, VolumeIcon, ZoomIcon, ResetIcon,
   ShareIcon, BookOpenIcon, CheckIcon
 } from './components/Icons';
+// Force update for Vercel deploy
 import type { LoopRegion, RecordingSession } from './types';
 import { getPracticeAdvice } from './services/geminiService';
 
