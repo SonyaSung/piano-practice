@@ -4,7 +4,7 @@ import {
   RecordIcon, StopIcon, SparklesIcon, VolumeIcon, ZoomIcon, ResetIcon,
   ShareIcon, BookOpenIcon, CheckIcon
 } from './components/Icons';
-// FORCE_NEW_DEPLOY_V1: Removed SettingsIcon to fix build error
+// FORCE_DEPLOY_TIMESTAMP: 2024_RETRY_FINAL
 import type { LoopRegion, RecordingSession } from './types';
 import { getPracticeAdvice } from './services/geminiService';
 
