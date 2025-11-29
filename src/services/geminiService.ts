@@ -4,14 +4,9 @@ export const getPracticeAdvice = async (
   query: string, 
   context?: string
 ): Promise<string> => {
-  // Check localStorage first, then environment variable
-  const apiKey = localStorage.getItem('gemini_api_key') || process.env.API_KEY;
-
-  if (!apiKey) {
-    return "請點擊右上角設定圖示，輸入 API Key 以啟用 AI 教練功能。(若不需要 AI 功能可忽略)";
-  }
-
-  const ai = new GoogleGenAI({ apiKey: apiKey });
+  // Use process.env.API_KEY exclusively as per guidelines.
+  // Assume it is configured in the environment.
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   try {
     const prompt = `
@@ -33,6 +28,6 @@ export const getPracticeAdvice = async (
     return response.text || "Keep practicing! Listen carefully to your rhythm and tone.";
   } catch (error) {
     console.error("Gemini API Error:", error);
-    return "Unable to reach the AI coach right now. Please check your API Key or connection.";
+    return "Unable to reach the AI coach right now. Please check your connection.";
   }
 };
